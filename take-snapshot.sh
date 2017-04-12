@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 DIR=$(dirname "$(readlink -f "$0")")
-. $DIR/conf.sh
+. "$DIR/conf.sh"
 
 SIZE_LIMIT=$1
 if [[ "$SIZE_LIMIT" == "" ]]; then 

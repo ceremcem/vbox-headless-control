@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 DIR=$(dirname "$(readlink -f "$0")")
-. $DIR/conf.sh
+. "$DIR/conf.sh"
 
 is_running () {
 	[ "$(VBoxManage list runningvms | grep $vm_name)" != "" ]
@@ -30,4 +30,5 @@ while : ; do
 	wait_for_disappear
 	echo "Starting $vm_name (user: $(whoami))"
 	VBoxManage startvm $vm_name --type headless
+    sleep 2
 done
