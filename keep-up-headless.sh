@@ -3,27 +3,31 @@
 DIR=$(dirname "$(readlink -f "$0")")
 . $DIR/conf.sh
 
+is_running () {
+	[ "$(VBoxManage list runningvms | grep $vm_name)" != "" ]
+}
+
 wait_for_disappear () {
-        while [ "$(VBoxManage list runningvms | grep $vm_name)" != "" ]
-        do 
-                echo "waiting $vm_name for disappear..."
+	if is_running; then
+		echo "Waiting $vm_name for disappear"
+	fi
+        while is_running; do
                 sleep 10
         done
 }
 
-vm_shutdown() {
-	# TODO: 
-	# * check only THIS virtual machine if it is alive
-	# * really send the acpi shutdown signal
-	echo "ACPI shutdown the machine"
-	VBoxManage controlvm $vm_name acpipowerbutton
-	exit
+vm_suspend() {
+	if is_running; then 
+		echo "Suspending $vm_name..."
+		VBoxManage controlvm $vm_name savestate
+		exit 0
+	fi
 }
 
-#trap vm_shutdown INT
+trap vm_suspend INT
 
 while : ; do 
 	wait_for_disappear
 	echo "Starting $vm_name (user: $(whoami))"
-	/usr/bin/VBoxHeadless --startvm "$vm_name"
+	VBoxManage startvm $vm_name --type headless
 done
