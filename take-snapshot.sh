@@ -22,10 +22,21 @@ while read -rd $'\0' vdi_file; do
 	fi
 done < <( find $SNAP_DIR -iname "*.vdi" -print0 )
 
-if [[ $RW_FILE_SIZE > $SIZE_LIMIT ]]; then 
-	echo "Filesize exceeds given limit, taking snapshot..."
+if (( $RW_FILE_SIZE > $SIZE_LIMIT )); then 
+	echo "Filesize exceeds given limit ($SIZE_LIMIT MB), taking snapshot..."
 else
-	echo "Filesize is smaller than given limit, not taking snapshot..."
+	echo "Filesize is smaller than given limit ($SIZE_LIMIT MB), not taking snapshot..."
+	exit 0
+fi
+
+
+if [[ "$2" != "take" ]]; then 
+	echo "------------------------------------"
+	echo "Dry run, not really taking snapshot."
+	echo "If you want to take snapshot, run as: "
+	echo 
+	echo "$0 SIZE_LIMIT take"
+	echo "-------------------------------------"
 	exit 0
 fi
 
