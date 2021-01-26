@@ -29,3 +29,6 @@ If this script is killed (via `INT` signal, eg. with Ctrl+C), it triggers the `s
 check the last snapshot file (the one in use) and if the file size is bigger than this limit, it will take a snapshot, 
 else it does nothing. 
 
+# See Also 
+
+https://www.andreafortuna.org/2019/10/24/how-to-create-a-virtualbox-vm-from-command-line/
